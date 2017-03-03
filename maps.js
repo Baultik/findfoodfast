@@ -62,7 +62,7 @@ function createMarkerInfo(title, details) {
  * @param origin The location to place the marker
  */
 function createMarker(placeResult, origin) {
-    //console.log(placeResult);
+
     infoWindow.close();
 
     var this_img;

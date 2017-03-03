@@ -200,7 +200,7 @@ function Places() {
      * @param status The status of the search
      */
     function parseResponse(results, status) {
-        //console.log("Got response", results);
+
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i in results) {
                 var placeResult = results[i];//PlaceResult objects

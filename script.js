@@ -11,7 +11,7 @@ $(document).ready(function(){
         build_page2($(this).attr('data-imgindex'));
     });
     main_body.on('click', '#bottom_buttons button', function(){
-        console.log(this);
+
         switch(this.id) {
             case "switch_directions":
                 my_places.switchDirection();
@@ -159,10 +159,10 @@ function set_direction(position) {
     var long_diff = next_long - starting_long;
     var lat_diff = next_lat - starting_lat;
 
-    //console.log("Differences " + long_diff, lat_diff);
+
     //var bearing = Math.tan(long_diff / lat_diff);
     var bearing = Math.atan2(lat_diff,long_diff) * (180 / Math.PI);
-    //console.log('bearing is '+ bearing);
+
     if (isNaN(bearing)) {
         return 0;
     }
@@ -173,7 +173,7 @@ function set_direction(position) {
  * @param button The fast food restaurant that was selected
  */
 function view_youtube_ads(button) {//whenever the "other content" button clicked whole page 2 hide and display page3
-    //console.log('hello');
+
     $.ajax({
         dataType: 'json',
         method: 'POST',
@@ -192,7 +192,7 @@ function view_youtube_ads(button) {//whenever the "other content" button clicked
                 "class" : "modal-title",
                 "text":result.video[0].title
             });
-            //console.log('AJAX Success function called, with the following result:', result);
+
             //modal area
             $('.modal-body *').remove();
             $('.modal-header h3').remove();
@@ -200,7 +200,7 @@ function view_youtube_ads(button) {//whenever the "other content" button clicked
             $('.modal-header').append(modal_h4);
             autoPlayYouTubeModal("https://www.youtube.com/embed/" + result.video[0].id);
             //var test = result.video[0].title;
-            //console.log('the title is :' + test);
+
             //modal area
             $("#myModal").on('hide.bs.modal', function(){
                 $("iframe").attr('src', '');
