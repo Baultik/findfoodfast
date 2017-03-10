@@ -106,8 +106,8 @@ function Places() {
         for (var i in places) {
             var place = places[i].geometry.location;
 
-            var lat = Math.pow(place.lat() - mLocation.lat ,2);
-            var lng = Math.pow(place.lng() - mLocation.lng ,2);
+            var lat = Math.pow(place.lat() - mLocation.lat, 2);
+            var lng = Math.pow(place.lng() - mLocation.lng, 2);
             var distance = Math.sqrt(lat + lng);
 
             if (!closest || closest > distance) {
@@ -136,12 +136,13 @@ function Places() {
         }
 
         map.fitBounds({
-            north:north,
-            south:south,
-            east:east,
-            west:west
+            north: north,
+            south: south,
+            east: east,
+            west: west
         });
     }
+
     /**
      * Filters places by a general direction
      * @param direction The general direction ie North or South
@@ -173,6 +174,7 @@ function Places() {
 
         return output;
     }
+
     /**
      * Translates a bearing in degrees to a general direction
      * @param bearing The bearing with east being 0deg and west being 180deg
@@ -194,6 +196,7 @@ function Places() {
         }
         return null;
     }
+
     /**
      * Parse the response from the places api
      * @param results The results array containing PlaceResult objects
@@ -214,6 +217,7 @@ function Places() {
             populateMap(mHeading, mPlaces);
         }
     }
+
     /**
      * Create a search request
      * @param search The search query

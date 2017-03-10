@@ -4,15 +4,15 @@
 /**
  * Main app entry point
  */
-$(document).ready(function(){
+$(document).ready(function () {
     build_page1();
     var main_body = $('.main_body');
-    main_body.on('click', '.logos_container div.col-xs-4', function(){
+    main_body.on('click', '.logos_container div.col-xs-4', function () {
         build_page2($(this).attr('data-imgindex'));
     });
-    main_body.on('click', '#bottom_buttons button', function(){
+    main_body.on('click', '#bottom_buttons button', function () {
 
-        switch(this.id) {
+        switch (this.id) {
             case "switch_directions":
                 my_places.switchDirection();
                 break;
@@ -24,9 +24,9 @@ $(document).ready(function(){
                 break;
         }
     });
-    navigator.geolocation.getCurrentPosition(function(position) {   // gets starting location to be used to determine bearing
-        starting_location=position.coords;
-    });
+    navigator.geolocation.getCurrentPosition(function (position) {   // gets starting location to be used to determine bearing
+        starting_location = position.coords;
+    },handleError);
     $('header').click(build_page1);
 });
 
@@ -35,29 +35,47 @@ var second_location;
 var direction;
 var my_places = null;
 var image_array = [
-    {image: 'burgerking.jpg',
-     name: 'Burger King'},
-    {image: 'carls.jpg',
-     name: "Carl's Jr."},
-    {image: 'deltaco.jpg',
-     name: "Del Taco"},
-    {image: 'innout.jpg',
-     name: "In-N-Out Burger"},
-    {image: 'jackinthebox.jpg',
-     name: "Jack in the Box"},
-    {image: 'kfc.jpg',
-     name: "KFC"},
-    {image: 'mcdonalds.jpg',
-     name: "McDonald's"},
-    {image: 'tacobell.jpg',
-     name: "Taco Bell"},
-    {image: 'wendys.jpg',
-     name: "Wendy's"}
+    {
+        image: 'burgerking.jpg',
+        name: 'Burger King'
+    },
+    {
+        image: 'carls.jpg',
+        name: "Carl's Jr."
+    },
+    {
+        image: 'deltaco.jpg',
+        name: "Del Taco"
+    },
+    {
+        image: 'innout.jpg',
+        name: "In-N-Out Burger"
+    },
+    {
+        image: 'jackinthebox.jpg',
+        name: "Jack in the Box"
+    },
+    {
+        image: 'kfc.jpg',
+        name: "KFC"
+    },
+    {
+        image: 'mcdonalds.jpg',
+        name: "McDonald's"
+    },
+    {
+        image: 'tacobell.jpg',
+        name: "Taco Bell"
+    },
+    {
+        image: 'wendys.jpg',
+        name: "Wendy's"
+    }
 ];
 /**
  * Build the initial page
  */
-function build_page1 () {
+function build_page1() {
     $('.main_body *').remove();
     var div_container = $('<div>', {
         "class": "logos_container"
@@ -105,10 +123,10 @@ function build_page1 () {
  * @param button The fast food restaurant that was selected
  */
 function build_page2(button) {
-    navigator.geolocation.getCurrentPosition(function(position) {
+    navigator.geolocation.getCurrentPosition(function (position) {
         direction = set_direction(position);
         build_page2_1(direction, button);
-    });
+    },handleError);
 }
 /**
  * Build the second page
@@ -116,18 +134,18 @@ function build_page2(button) {
  * @param button The fast food restaurant that was selected
  */
 function build_page2_1(bearing, button) {
-    var dpanel = $("<div>",{
+    var dpanel = $("<div>", {
         id: "directionsPanel"
     });
     $('.main_body *').remove();
     var food_name = image_array[button].name;
     var map_container = $('<div id = "map">');
     var main_body = $('.main_body');
-    main_body.append(map_container,dpanel);
+    main_body.append(map_container, dpanel);
 
     var bottom_choices = $('<div id="bottom_buttons">');
     var button1 = $('<button id = "switch_directions" class = "btn btn-primary btn-lg">').text('Switch Direction');
-    var button2 = $('<button id = "other_content" class = "btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">').text('View YouTube').attr('data-button',button); //data-button is used here to correctly choose the YouTube video later
+    var button2 = $('<button id = "other_content" class = "btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">').text('View YouTube').attr('data-button', button); //data-button is used here to correctly choose the YouTube video later
     var button3 = $('<button id = "choose_again" class = "btn btn-warning btn-sm">').text('Choose Again');
     main_body.append(bottom_choices);
     $('#bottom_buttons').append(button1, button2, button3);
@@ -140,7 +158,7 @@ function build_page2_1(bearing, button) {
         lng: second_location.longitude
     };
     showCurrentLocation(location);
-    my_places.init(map,location);
+    my_places.init(map, location);
     map.setCenter(location);
     my_places.search(food_name, location, bearing);
 }
@@ -159,9 +177,7 @@ function set_direction(position) {
     var long_diff = next_long - starting_long;
     var lat_diff = next_lat - starting_lat;
 
-
-    //var bearing = Math.tan(long_diff / lat_diff);
-    var bearing = Math.atan2(lat_diff,long_diff) * (180 / Math.PI);
+    var bearing = Math.atan2(lat_diff, long_diff) * (180 / Math.PI);
 
     if (isNaN(bearing)) {
         return 0;
@@ -178,19 +194,18 @@ function view_youtube_ads(button) {//whenever the "other content" button clicked
         dataType: 'json',
         method: 'POST',
         data: {
-            q: image_array[button].name+" ad USA 2016",
+            q: image_array[button].name + " ad USA 2016",
             maxResults: 1,
             type: 'video'
         },
         url: 'https://s-apis.learningfuze.com/hackathon/youtube/search.php',
-        success: function (result){
+        success: function (result) {
             var iframe = $('<iframe>', {
-               "class" : "advertising_video"
-                // "src" : "https://www.youtube.com/embed/" + result.video[0].id
-        });
-            var modal_h4 = $('<h3>',{
-                "class" : "modal-title",
-                "text":result.video[0].title
+                "class": "advertising_video"
+            });
+            var modal_h4 = $('<h3>', {
+                "class": "modal-title",
+                "text": result.video[0].title
             });
 
             //modal area
@@ -199,10 +214,9 @@ function view_youtube_ads(button) {//whenever the "other content" button clicked
             $('.modal-body').append(iframe);
             $('.modal-header').append(modal_h4);
             autoPlayYouTubeModal("https://www.youtube.com/embed/" + result.video[0].id);
-            //var test = result.video[0].title;
 
             //modal area
-            $("#myModal").on('hide.bs.modal', function(){
+            $("#myModal").on('hide.bs.modal', function () {
                 $("iframe").attr('src', '');
             });
         }
@@ -213,7 +227,29 @@ function view_youtube_ads(button) {//whenever the "other content" button clicked
  * @param source The source url
  */
 function autoPlayYouTubeModal(source) {
-        var theModal = $('#myModal iframe'),
-            videoSRCauto = source + "?autoplay=1";
-        $(theModal).attr('src', videoSRCauto);
+    var theModal = $('#myModal iframe'),
+        videoSRCauto = source + "?autoplay=1";
+    $(theModal).attr('src', videoSRCauto);
+}
+
+/**
+ * Displays the error msg if GPS not working.
+ * @param error
+ */
+function handleError(error) {
+    var errDiv = document.getElementById('error');
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            errDiv.innerHTML = "ERROR<br>User denied the request for Geolocation.";
+            break;
+        case error.POSITION_UNAVAILABLE:
+            errDiv.innerHTML = "ERROR<br>Location information is unavailable.";
+            break;
+        case error.TIMEOUT:
+            errDiv.innerHTML = "ERROR<br>The request to get user location timed out.";
+            break;
+        case error.UNKNOWN_ERROR:
+            errDiv.innerHTML = "ERROR<br>An unknown error occurred.";
+            break;
+    }
 }
